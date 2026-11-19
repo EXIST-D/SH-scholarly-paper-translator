@@ -1,0 +1,9 @@
+{
+  "_note": "EXAMPLE ONLY - made up to show the shape this Skill can handle. The real case file is /input/case.json.",
+  "case_id": "demo-001",
+  "task": "Translate the attached paper (pages 1-3) into Chinese with a locked glossary; give a paragraph-aligned bilingual result.",
+  "target_language": "zh",
+  "input_files": ["paper.pdf"],
+  "glossary": [{"source": "pre-training", "target": "预训练"}, {"source": "fine-tuning", "target": "微调"}],
+  "output_contract": ["case_id", "status", "translation", "bilingual", "glossary", "checks", "uncertainty", "change_records", "sources", "unknown_extra_field"]
+}
