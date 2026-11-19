@@ -383,6 +383,18 @@ def build_segments(blocks, args, src_lang):
                 n = int(s["id"][1:])
                 if not (lo <= n <= hi) and s["action"] != "omit":
                     s["action"], s["reason"] = "omit", "outside the requested id range"
+    # text anchors: translate from the first segment matching --from-text up to the last one matching --to-text
+    lo_i, hi_i = 0, len(segs) - 1
+    if getattr(args, "from_text", None):
+        rx = re.compile(args.from_text, re.I)
+        lo_i = next((i for i, s in enumerate(segs) if rx.search(s["text"])), 0)
+    if getattr(args, "to_text", None):
+        rx = re.compile(args.to_text, re.I)
+        hits = [i for i, s in enumerate(segs) if rx.search(s["text"]) and i >= lo_i]
+        hi_i = hits[0] if hits else len(segs) - 1
+    for i, s in enumerate(segs):
+        if (i < lo_i or i > hi_i) and s["action"] != "omit":
+            s["action"], s["reason"] = "omit", "outside the requested text range"
     return segs
 
 
@@ -1364,6 +1376,8 @@ def main(argv=None):
     p.add_argument("--tgt")
     p.add_argument("--pages")
     p.add_argument("--range")
+    p.add_argument("--from-text", help="regex: start translating at the first segment that matches")
+    p.add_argument("--to-text", help="regex: stop after the first later segment that matches (inclusive)")
     p.add_argument("--batch-tokens", type=int, default=1100)
     p.add_argument("--fixed-batches", action="store_true", help="do not enlarge batches automatically when there are more than 14")
     p.add_argument("--budget", type=int, default=900)
