@@ -849,7 +849,9 @@ def parse_blocks(text):
     cur = None
     for ln in text.splitlines():
         s = ln.rstrip()
-        m = re.match(r"^===\s*(S\d{3,})\b\s*(.*)$", s)
+        if re.match(r"^\s*```\w*\s*$", s):  # models often wrap the block in a code fence
+            continue
+        m = re.match(r"^\s*[#=*]{2,}\s*\[?(S\d{3,})\]?\b\**\s*(.*)$", s)
         if m:
             cur = {"id": m.group(1), "lines": [], "note": "", "terms": "", "flag": ""}
             fl = re.search(r"flag\s*=\s*(\w+)", m.group(2))

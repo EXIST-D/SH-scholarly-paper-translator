@@ -30,6 +30,8 @@ EOF
 python3 $SK/scripts/tr.py next $W --fix               # ONLY if ingest reported ERRORs: the failing segments + reasons
 python3 $SK/scripts/tr.py assemble $W --out /app/output --case /input/case.json         # run early and often
 ```
+If the material is inside `case.json` (fields such as `paragraphs`, `segments`, `text`), pass `/input/case.json` as the input
+or write the text to a `.md` file first.
 `prepare` options: `--tgt zh|en|...` (default: from case.json, else Chinese for English sources and English for Chinese
 sources), `--glossary FILE` (json / csv / tsv / "src => tgt" lines / markdown table), `--pages 3-5` or `--range S010-S040`
 (only part of the document), `--translate-references`, `--budget 900` (seconds), `--ocr auto|off|force` (scanned PDFs).
